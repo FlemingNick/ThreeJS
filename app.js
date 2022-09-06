@@ -18,7 +18,7 @@ function init(){
     const aspect = (container.clientWidth/2)/(container.clientHeight/2);
     const near = 0.1;
     const far = 500;
-
+    
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(-20,3,-1);
 
@@ -32,6 +32,7 @@ function init(){
     //renderer
     //alpha to set any background we want
     renderer = new THREE.WebGL1Renderer({antialias:true, alpha:true});
+    window.renderer = renderer;
     renderer.setSize(w, h, false);
     renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -52,7 +53,7 @@ function init(){
 
     function animate(){
         requestAnimationFrame(animate);
-        //house.rotation.z += 0.005;
+        house.rotation.y += 0.002;
         controls.update();
         renderer.render(scene, camera);
     }
