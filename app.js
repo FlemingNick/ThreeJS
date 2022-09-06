@@ -20,13 +20,13 @@ function init(){
     const far = 500;
 
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.set(-4,3,-1);
+    camera.position.set(-20,3,-1);
 
     const ambient = new THREE.AmbientLight(0x404040, 3);
     scene.add(ambient);
 
     const light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(-70,80,10);
+    light.position.set(-200,0,0);
     scene.add(light);
 
     //renderer
@@ -46,12 +46,13 @@ function init(){
     loader.load('./model/scene.gltf', function(gltf){
         scene.add(gltf.scene);
         house = gltf.scene.children[0];
+        house.rotation.y += 3.7
         animate();
     });
 
     function animate(){
         requestAnimationFrame(animate);
-        house.rotation.z += 0.005;
+        //house.rotation.z += 0.005;
         controls.update();
         renderer.render(scene, camera);
     }

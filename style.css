@@ -35,7 +35,7 @@ body{
     display: flex;
     align-items: flex-end;
     padding-left: 20rem;
-    background-color: bisque;
+    background-color: rgb(243, 243, 243);
 }
 
 .text-box{
@@ -52,24 +52,29 @@ body{
 }
 
 .text-box>h2{
-    margin-top: 15rem;
+    margin-top: 12rem;
     font-size: 48px;
-    color: lightsalmon;
+    color: rgb(227, 12, 19);
+}
+
+.text-box>h3{
+    font-size: 24px;
+    color: rgb(134, 134, 134);
 }
 
 .text-box>p{
-    margin-top: 5rem;
-    color: lightsalmon;
+    margin-top: 2rem;
+    color: black;
     width: 40rem;
 }
 
 button{
     margin-top: 2rem;
-    color: lightsalmon;
+    color: rgb(227, 12, 19);
     width: 8rem;
     padding: 6px;
-    border: 2px solid chocolate;
-    background-color: rgba(255,160,22,0.2);
+    border: 2px solid rgb(227, 12, 19);
+    background-color: rgba(134, 134, 134,0.2);
     
 }
 
