@@ -114,3 +114,7 @@ function onWindowResize() {
     renderer.setSize( w, h );
 
 }
+
+gui.onFinishChange(event=>{
+    console.log(colorFormats.Color)
+})
