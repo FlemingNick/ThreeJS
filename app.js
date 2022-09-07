@@ -7,6 +7,8 @@ let camera;
 let renderer;
 let scene;
 let house;
+let startRotation = 3.7;
+let rotating = true;
 
 function init(){
     container = document.querySelector('.scene');
@@ -49,13 +51,13 @@ function init(){
     loader.load('./model/scene.gltf', function(gltf){
         scene.add(gltf.scene);
         house = gltf.scene.children[0];
-        house.rotation.y += 3.7
+        house.rotation.y += startRotation;
         animate();
     });
 
     function animate(){
         requestAnimationFrame(animate);
-        //house.rotation.y += 0.002;
+        if(rotating) house.rotation.y += 0.002;
         controls.update();
         renderer.render(scene, camera);
     }
@@ -78,6 +80,12 @@ function onWindowResize() {
 
 const gui = new GUI();
 
+const controls = {
+	Rotation: true,
+};
+
+gui.add(controls, 'Rotation');
+
 // Create color pickers for multiple color formats
 const colorFormats = {
 	string: '#ffffff',
@@ -89,15 +97,23 @@ const colorFormats = {
 gui.addColor( colorFormats, 'object' );
 
 gui.onFinishChange(event=>{
+    rotating = controls.Rotation;
     console.log(colorFormats.object)
     let loader = new THREE.GLTFLoader();
     scene.traverse((child)=>{
         if(child.isMesh && child.material.name == "Metall_MAT") {
-            console.log(child.material)
             child.material.color.r = colorFormats.object.r;
             child.material.color.g = colorFormats.object.g;
             child.material.color.b = colorFormats.object.b;  
         }
+        if(child.isMesh){
+            if(!rotating){
+                house.rotation.y = startRotation;
+            }
+        }
     })
-
 })
+
+function toggleRotation(){
+    rotating = !rotating;
+}
