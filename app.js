@@ -6,9 +6,10 @@ let container;
 let camera;
 let renderer;
 let scene;
-let house;
+let mesh;
 let startRotation = 3.7;
 let rotating = true;
+let open = false;
 
 function init(){
     container = document.querySelector('.scene');
@@ -50,14 +51,14 @@ function init(){
     let loader = new THREE.GLTFLoader();
     loader.load('./model/scene.gltf', function(gltf){
         scene.add(gltf.scene);
-        house = gltf.scene.children[0];
-        house.rotation.y += startRotation;
+        mesh = gltf.scene.children[0];
+        mesh.rotation.y += startRotation;
         animate();
     });
 
     function animate(){
         requestAnimationFrame(animate);
-        if(rotating) house.rotation.y += 0.002;
+        if(rotating) mesh.rotation.y += 0.002;
         controls.update();
         renderer.render(scene, camera);
     }
@@ -82,9 +83,11 @@ const gui = new GUI();
 
 const controls = {
 	Rotation: true,
+    Open: false
 };
 
 gui.add(controls, 'Rotation');
+gui.add(controls, 'Open');
 
 // Create color pickers for multiple color formats
 const colorFormats = {
@@ -101,17 +104,53 @@ gui.onFinishChange(event=>{
     console.log(colorFormats.object)
     let loader = new THREE.GLTFLoader();
     scene.traverse((child)=>{
+        if(child.isMesh){
+            if(!rotating){
+                mesh.rotation.y = startRotation;
+            }
+        }
         if(child.isMesh && child.material.name == "Metall_MAT") {
             child.material.color.r = colorFormats.object.r;
             child.material.color.g = colorFormats.object.g;
             child.material.color.b = colorFormats.object.b;  
         }
-        if(child.isMesh){
-            if(!rotating){
-                house.rotation.y = startRotation;
-            }
-        }
     })
+    if(controls.Open && !open){
+        console.log(scene);
+
+        scene.children.forEach(child => {
+            if(child.name = "Scene"){
+                child.children.forEach(grandchild => {
+                    if(grandchild.name = "Cube"){
+                        child.remove(grandchild)
+                        loader.load('./model/scene_open.gltf', function(gltf){
+                            scene.add(gltf.scene);
+                            mesh = gltf.scene.children[0];
+                            mesh.rotation.y += startRotation;
+                        });
+                        open = true;
+                    }
+                })
+            }
+        })
+    }
+    if(!controls.Open && open){
+        scene.children.forEach(child => {
+            if(child.name = "Scene"){
+                child.children.forEach(grandchild => {
+                    if(grandchild.name = "Cube_Open"){
+                        child.remove(grandchild)
+                        loader.load('./model/scene.gltf', function(gltf){
+                            scene.add(gltf.scene);
+                            mesh = gltf.scene.children[0];
+                            mesh.rotation.y += startRotation;
+                        });
+                        open = false;
+                    }
+                })
+            }
+        })
+    }
 })
 
 function toggleRotation(){
