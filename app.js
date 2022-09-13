@@ -56,9 +56,14 @@ function init(){
         animate();
     });
 
+    let time = Date.now();
+
     function animate(){
         requestAnimationFrame(animate);
-        if(rotating) mesh.rotation.y += 0.002;
+        const currentTime = Date.now();
+        const deltaTime = currentTime - time
+        time = currentTime;
+        if(rotating) mesh.rotation.y += 0.0001 * deltaTime;
         controls.update();
         renderer.render(scene, camera);
     }
@@ -103,18 +108,6 @@ gui.onFinishChange(event=>{
     rotating = controls.Rotation;
     console.log(colorFormats.object)
     let loader = new THREE.GLTFLoader();
-    scene.traverse((child)=>{
-        if(child.isMesh){
-            if(!rotating){
-                mesh.rotation.y = startRotation;
-            }
-        }
-        if(child.isMesh && child.material.name == "Metall_MAT") {
-            child.material.color.r = colorFormats.object.r;
-            child.material.color.g = colorFormats.object.g;
-            child.material.color.b = colorFormats.object.b;  
-        }
-    })
     if(controls.Open && !open){
         console.log(scene);
 
@@ -151,6 +144,18 @@ gui.onFinishChange(event=>{
             }
         })
     }
+    scene.traverse((child)=>{
+        if(child.isMesh){
+            if(!rotating){
+                mesh.rotation.y = startRotation;
+            }
+        }
+        if(child.isMesh && child.material.name == "Metall_MAT") {
+            child.material.color.r = colorFormats.object.r;
+            child.material.color.g = colorFormats.object.g;
+            child.material.color.b = colorFormats.object.b;  
+        }
+    })
 })
 
 function toggleRotation(){
