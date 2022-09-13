@@ -43,6 +43,7 @@ function init(){
 
     //Controls
     const controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls.enableDamping = true;
     controls.update();
 
     container.appendChild(renderer.domElement);
