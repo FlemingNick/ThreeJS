@@ -39,7 +39,7 @@ function init(){
     renderer = new THREE.WebGL1Renderer({antialias:true, alpha:true});
     window.renderer = renderer;
     renderer.setSize(w, h, false);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 
     //Controls
     const controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -82,6 +82,7 @@ function onWindowResize() {
     let w = container.offsetWidth;
     let h = container.offsetHeight;
     renderer.setSize( w, h );
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 
 }
 
@@ -162,3 +163,31 @@ gui.onFinishChange(event=>{
 function toggleRotation(){
     rotating = !rotating;
 }
+
+container.addEventListener('dblclick', () =>
+{
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+
+    if(!fullscreenElement)
+    {
+        if(container.requestFullscreen)
+        {
+            container.requestFullscreen()
+        }
+        else if(container.webkitRequestFullscreen)
+        {
+            container.webkitRequestFullscreen()
+        }
+    }
+    else
+    {
+        if(document.exitFullscreen)
+        {
+            document.exitFullscreen()
+        }
+        else if(document.webkitExitFullscreen)
+        {
+            document.webkitExitFullscreen()
+        }
+    }
+})
